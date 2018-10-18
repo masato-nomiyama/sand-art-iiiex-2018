@@ -1,6 +1,6 @@
 // Copyright (C) 2018-Present Masato Nomiyama
 
-int outputPin[] = {9, 10, 11};
+int outputPin[] = {9, 10, 11, 13};
 int count = 0;
 int frequency = 256;
 float period;
@@ -11,11 +11,12 @@ void setup() {
 
 void loop() {
   analogWrite(outputPin[0], triangleSpike(phase(0.0)) / reduction);
-  analogWrite(outputPin[1], triangleSpike(phase(1.0 / 3)) / reduction);
-  analogWrite(outputPin[2], triangleSpike(phase(2.0 / 3)) / reduction);
+  analogWrite(outputPin[1], triangleSpike(phase(-1.0 / 3)) / reduction);
+  analogWrite(outputPin[2], triangleSpike(phase(-2.0 / 3)) / reduction);
+  analogWrite(outputPin[3], triangleSpike(phase(-3.0 / 3)) / reduction);
   count++;
   count = count >= frequency ? count % frequency : count;
-  delay(25);
+  delay(10);
 }
 
 float phase(float difference) {
