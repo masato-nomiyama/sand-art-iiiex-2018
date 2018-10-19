@@ -54,6 +54,7 @@ void loop() {
       }
       break;
     case ACT_END:
+      state = WAIT;
       break;
     case CLOSE:
       analogWrite(outputPin[0], random(48, 155));
