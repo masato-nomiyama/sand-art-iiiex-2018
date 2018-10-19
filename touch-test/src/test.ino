@@ -19,15 +19,23 @@ void setup() {
 
 void loop() {
   // Receive touche state
-  if (state != ACT && state != ACT_END && Serial.available() > 0) {
-      char incomingByte = Serial.read();
-      if (incomingByte == "a") {
-        state = WAIT;
-      } else if (incomingByte == "b") {
-        state = CLOSE;
-      } else if (incomingByte == "c") {
-        state = TOUCHED;
+  if (Serial.available() > 0) {
+    char incomingByte = Serial.read();
+    if (state != ACT && state != ACT_END) {
+      switch(incomingByte) {
+        case 'a':
+          state = WAIT;
+          break;
+        case 'b':
+          state = CLOSE;
+          break;
+        case 'c':
+          state = TOUCHED;
+          break;
+        default:
+          break;
       }
+    }
   }
 
   switch(state) {
