@@ -63,6 +63,10 @@ void loop() {
       analogWrite(outputPin[3], random(48, 155));
       break;
     case WAIT:
+      analogWrite(outputPin[0], 0);
+      analogWrite(outputPin[1], 0);
+      analogWrite(outputPin[2], 0);
+      analogWrite(outputPin[3], 0);
       break;
     default:
       break;
