@@ -15,12 +15,18 @@ int wholeFrequency = frequency * ((propagateNum - 1) * propagateSpeed + 1.0);
 int state = WAIT;
 
 void setup() {
+  Serial.begin(9600);
+  for (int i = 0; i < sizeof(outputPin) / sizeof(outputPin[0]); i++) {
+    pinMode(outputPin[i], OUTPUT);
+  }
 }
 
 void loop() {
   // Receive touche state
   if (Serial.available() > 0) {
     char incomingByte = Serial.read();
+    Serial.println(incomingByte);
+
     if (state != ACT && state != ACT_END) {
       switch(incomingByte) {
         case 'a':
