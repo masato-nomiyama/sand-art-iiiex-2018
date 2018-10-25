@@ -21,13 +21,21 @@ void loop() {
     if (analogRead(inputPin[i]) > 512) {
       count[i] = 0;
     }
-    analogWrite(outputPin[i], triangleSpike((float)count[i] / frequency));
+    analogWrite(outputPin[i], triangle((float)count[i] / frequency));
     count[i]++;
     if (count[i] >= INT_MAX) {
       count[i] = frequency;
     }
   }
-  delay(10);
+  delay(1);
+}
+
+int rectangle(float phase) {
+  if (phase < 0 || phase > 1) {
+    return 0;
+  } else {
+    return 255;
+  }
 }
 
 int triangle(float phase) {

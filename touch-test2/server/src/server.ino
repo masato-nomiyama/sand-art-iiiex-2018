@@ -1,11 +1,11 @@
 // Copyright (C) 2018-Present Masato Nomiyama
 
-int outputPin[] = {2, 3, 4, 5, 6, 7};
+int outputPin[] = {4, 3, 2, 7, 6, 5, 8, 9, 10, 13, 12, 11};
 int pinNum = sizeof(outputPin) / sizeof(outputPin[0]);
 int *output = new int[pinNum];
 int count = 0;
 int frequency = 256;
-int propagateSpeed = frequency / 2;
+int propagateSpeed = frequency / 3;
 int propagateNum = 0;
 
 #define TOUCHED 0
@@ -51,13 +51,19 @@ void loop() {
       state = ACT;
       break;
     case ACT:
-      entry(0, phase(0));
-      entry(1, phase(0));
-      entry(2, phase(0));
+      entry(0, phase(4));
+      entry(1, phase(3));
+      entry(2, phase(2));
+      entry(3, phase(3));
+      entry(4, phase(2));
       entry(5, phase(1));
-      entry(4, phase(1));
-      entry(3, phase(1));
-      write();
+      entry(6, phase(2));
+      entry(7, phase(1));
+      entry(8, phase(0));
+      entry(9, phase(3));
+      entry(10, phase(4));
+      entry(11, phase(5));
+      start();
       count++;
       if (phase(propagateNum) >= 1) {
         state = ACT_END;
@@ -75,7 +81,7 @@ void loop() {
     default:
       break;
   }
-  delay(10);
+  delay(1);
 }
 
 float phase(int propagateOrder) {
@@ -97,7 +103,7 @@ void clear() {
   }
 }
 
-void write() {
+void start() {
   for (int i = 0; i < pinNum; i++) {
     digitalWrite(outputPin[i], output[i]);
     output[i] = LOW;
