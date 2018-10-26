@@ -1,10 +1,15 @@
 // Copyright (C) 2018-Present Masato Nomiyama
 
 // STATE
-#define TOUCHED 0
+#define WAIT 0
 #define CLOSE 1
-#define WAIT 2
+#define TOUCHED 2
 #define ACT_1 3
+#define ACT_2 4
+#define ACT_3 5
+#define ACT_4 6
+#define ACT_5 7
+#define ACT_6 8
 int state = WAIT;
 
 // MOVEMENT (unit: μs)
@@ -17,7 +22,7 @@ unsigned long pulsePeriod = 0;
 int propagateNum = 0;
 
 // I/O
-int outputPin[] = {2, 3, 4};
+int outputPin[] = {2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13};
 int pinNum = sizeof(outputPin) / sizeof(outputPin[0]);
 char incomingByte;
 
@@ -35,7 +40,7 @@ void loop() {
   if (Serial.available() > 0) {
     incomingByte = Serial.read();
 
-    if (state != ACT_1) {
+    if (state < ACT_3) {
       switch(incomingByte) {
         case 'a':
           state = WAIT;
@@ -57,22 +62,101 @@ void loop() {
       stop();
       break;
     case CLOSE:
-      start();
-      drive(outputPin[0], phase(0), rectangle);
-      drive(outputPin[1], phase(0), rectangle);
-      drive(outputPin[2], phase(0), rectangle);
-
-      update(CLOSE);
-      break;
-    case TOUCHED:
       state = ACT_1;
       start();
       break;
+    case TOUCHED:
+      state = random(ACT_3, ACT_6 + 1);
+      start();
+      break;
     case ACT_1:
+      drive(outputPin[0], phase(0), rectangle);
+      drive(outputPin[1], phase(0), rectangle);
+      drive(outputPin[2], phase(0), rectangle);
+      drive(outputPin[3], phase(0), rectangle);
+      drive(outputPin[4], phase(0), rectangle);
+      drive(outputPin[5], phase(0), rectangle);
+      drive(outputPin[6], phase(0), rectangle);
+      drive(outputPin[7], phase(0), rectangle);
+      drive(outputPin[8], phase(0), rectangle);
+      drive(outputPin[9], phase(0), rectangle);
+      drive(outputPin[10], phase(0), rectangle);
+      drive(outputPin[11], phase(0), rectangle);
+      update(CLOSE);
+      break;
+    case ACT_2:
+      drive(outputPin[0], phase(0), random);
+      drive(outputPin[1], phase(0), random);
+      drive(outputPin[2], phase(0), random);
+      drive(outputPin[3], phase(0), random);
+      drive(outputPin[4], phase(0), random);
+      drive(outputPin[5], phase(0), random);
+      drive(outputPin[6], phase(0), random);
+      drive(outputPin[7], phase(0), random);
+      drive(outputPin[8], phase(0), random);
+      drive(outputPin[9], phase(0), random);
+      drive(outputPin[10], phase(0), random);
+      drive(outputPin[11], phase(0), random);
+      update(CLOSE);
+      break;
+    case ACT_3:
+      drive(outputPin[0], phase(0), triangleSpike);
+      drive(outputPin[1], phase(0), triangleSpike);
+      drive(outputPin[2], phase(0), triangleSpike);
+      drive(outputPin[3], phase(1), triangleSpike);
+      drive(outputPin[4], phase(1), triangleSpike);
+      drive(outputPin[5], phase(1), triangleSpike);
+      drive(outputPin[6], phase(2), triangleSpike);
+      drive(outputPin[7], phase(2), triangleSpike);
+      drive(outputPin[8], phase(2), triangleSpike);
+      drive(outputPin[9], phase(3), triangleSpike);
+      drive(outputPin[10], phase(3), triangleSpike);
+      drive(outputPin[11], phase(3), triangleSpike);
+      update(WAIT);
+      break;
+    case ACT_4:
       drive(outputPin[0], phase(0), triangleSpike);
       drive(outputPin[1], phase(1), triangleSpike);
       drive(outputPin[2], phase(2), triangleSpike);
-
+      drive(outputPin[3], phase(3), triangleSpike);
+      drive(outputPin[4], phase(4), triangleSpike);
+      drive(outputPin[5], phase(5), triangleSpike);
+      drive(outputPin[6], phase(6), triangleSpike);
+      drive(outputPin[7], phase(7), triangleSpike);
+      drive(outputPin[8], phase(8), triangleSpike);
+      drive(outputPin[9], phase(9), triangleSpike);
+      drive(outputPin[10], phase(10), triangleSpike);
+      drive(outputPin[11], phase(11), triangleSpike);
+      update(WAIT);
+      break;
+    case ACT_5:
+      drive(outputPin[0], phase(0), triangleSpike);
+      drive(outputPin[1], phase(1), triangleSpike);
+      drive(outputPin[2], phase(2), triangleSpike);
+      drive(outputPin[3], phase(5), triangleSpike);
+      drive(outputPin[4], phase(4), triangleSpike);
+      drive(outputPin[5], phase(3), triangleSpike);
+      drive(outputPin[6], phase(6), triangleSpike);
+      drive(outputPin[7], phase(7), triangleSpike);
+      drive(outputPin[8], phase(8), triangleSpike);
+      drive(outputPin[9], phase(11), triangleSpike);
+      drive(outputPin[10], phase(10), triangleSpike);
+      drive(outputPin[11], phase(9), triangleSpike);
+      update(WAIT);
+      break;
+    case ACT_6:
+      drive(outputPin[4], phase(0), triangleSpike);
+      drive(outputPin[1], phase(1), triangleSpike);
+      drive(outputPin[2], phase(1), triangleSpike);
+      drive(outputPin[3], phase(1), triangleSpike);
+      drive(outputPin[5], phase(1), triangleSpike);
+      drive(outputPin[6], phase(1), triangleSpike);
+      drive(outputPin[7], phase(1), triangleSpike);
+      drive(outputPin[0], phase(2), triangleSpike);
+      drive(outputPin[8], phase(2), triangleSpike);
+      drive(outputPin[9], phase(2), triangleSpike);
+      drive(outputPin[10], phase(2), triangleSpike);
+      drive(outputPin[11], phase(3), triangleSpike);
       update(WAIT);
       break;
     default:
@@ -97,7 +181,7 @@ void start() {
 }
 
 void drive(int pin, float phase, float (*wave)(float)) {
-  if (t - pwmPeriod <= pwmLength * wave(phase)) {
+  if (t - pwmPeriod < pwmLength * wave(phase)) {
     digitalWrite(pin, HIGH);
   } else {
     digitalWrite(pin, LOW);
@@ -120,6 +204,14 @@ void stop() {
 }
 
 // WAVE
+float random(float phase) {
+  if (phase < 0 || phase > 1) {
+    return 0;
+  } else {
+    return (float)random(40, 70) / 100;
+  }
+}
+
 float rectangle(float phase) {
   if (phase < 0 || phase > 1) {
     return 0;
