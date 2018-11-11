@@ -154,18 +154,10 @@ void loop() {
 }
 
 // CORE
-void initWaveLengthRates(float *waveLengthRates, unsigned int phaseNum) {
-  for (unsigned int i = 0; i < phaseNum; i++) {
-    waveLengthRates[i] = 1.0;
-  }
-}
-
 float setPhases(float *phases, float *waveLengthRates, unsigned int phaseNum) {
   float propagateOffset = 0;
   for (unsigned int i = 0; i < phaseNum; i++) {
-    phases[i] = (
-      (float)((t - wavePeriod) - propagateOffset) / waveLength / waveLengthRates[i]
-    );
+    phases[i] = (float)((t - wavePeriod) - propagateOffset) / waveLength / waveLengthRates[i];
     propagateOffset += (float)waveLength * propagateRate * waveLengthRates[i];
   }
   return phases[phaseNum - 1];
@@ -176,7 +168,8 @@ void drive(
   float phase,
   float powerRate,
   int *pinIndex,
-  unsigned int phaseNum) {
+  unsigned int phaseNum
+) {
   if (t - pwmPeriod < pwmLength * wave(phase) * powerRate) {
     for (unsigned int i = 0; i < phaseNum; i++) {
       digitalWrite(pins[pinIndex[i]], HIGH);
