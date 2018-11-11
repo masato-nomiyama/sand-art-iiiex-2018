@@ -1,6 +1,6 @@
 // Copyright (C) 2018-Present Masato Nomiyama
 
-float actWhenClose(int place) {
+float actWhenTouched(int place) {
   float lastPhase = 1.0;
   switch(place) {
     case 0:
@@ -35,22 +35,6 @@ float actWhenClose(int place) {
       drive(triangleSpike, phases[3], 0.05,
         pinIndex4, sizeof(pinIndex4) / sizeof(int));
 
-      break;
-    }
-    default: {
-      break;
-    }
-  }
-  return lastPhase;
-}
-
-float actWhenTouched(int place) {
-  float lastPhase = 1.0;
-  switch(place) {
-    case 0:
-    case 1:
-    case 2:
-    case 3: {
       break;
     }
     default: {
