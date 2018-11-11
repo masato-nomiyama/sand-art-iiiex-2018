@@ -9,6 +9,7 @@
 #define ACT_WHEN_TOUCHED 5
 int state = WAIT;
 int place = 0;
+int lastPlace = -1;
 
 // MOVEMENT (unit: μs)
 const unsigned long pwmLength = 10000;
@@ -57,6 +58,10 @@ void loop() {
         case 'e':
           state = CLOSE;
           place = int(incomingByte - 'b');
+          if (place == lastPlace) {
+            state = WAIT;
+          }
+          lastPlace = place;
           break;
         case 'f':
         case 'g':
@@ -64,6 +69,7 @@ void loop() {
         case 'i':
           state = TOUCHED;
           place = int(incomingByte - 'f');
+          lastPlace = place;
           break;
         default:
           break;
