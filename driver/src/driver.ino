@@ -51,7 +51,7 @@ void loop() {
     if (state <= ACT_WHEN_WAITING) {
       switch(incomingByte) {
         case 'a':
-          place = -1;
+          lastPlace = -1;
           if (state != ACT_WHEN_WAITING) {
             state = WAIT;
           }
@@ -60,9 +60,11 @@ void loop() {
         case 'c':
         case 'd':
         case 'e':
-          place = int(incomingByte - 'b');
+          place = incomingByte - 'b';
           if (place != lastPlace) {
             state = CLOSE;
+          } else {
+            start();
           }
           lastPlace = place;
           break;
@@ -71,7 +73,7 @@ void loop() {
         case 'h':
         case 'i':
           state = TOUCHED;
-          place = int(incomingByte - 'f');
+          place = incomingByte - 'f';
           lastPlace = place;
           break;
         default:
