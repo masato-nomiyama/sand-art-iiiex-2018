@@ -4,18 +4,19 @@
 #define WAIT 0
 #define CLOSE 1
 #define TOUCHED 2
-#define REST 3
+#define ACT_WHEN_WAITING 3
 #define ACT_WHEN_CLOSE 4
 #define ACT_WHEN_TOUCHED 5
 int state = WAIT;
 int place = 0;
 int lastPlace = -1;
+const unsigned long restLengthForReset = 1000000 * 1;
+const unsigned long restLengthForAction = 1000000 * 20;
 
 // MOVEMENT (unit: μs)
 const unsigned long pwmLength = 10000;
 const unsigned long waveLength = 512000;
 const float propagateRate = 0.1;
-const unsigned long restLength = waveLength * 1.5;
 unsigned long t = 0;
 unsigned long pwmPeriod = 0;
 unsigned long wavePeriod = 0;
@@ -34,7 +35,7 @@ void drive(
   int *drivePins,
   unsigned int phaseNum
 );
-void execute(float (*act)(int));
+void execute(float (*act)(int), boolean shouldLoop);
 
 void setup() {
   Serial3.begin(9600);
@@ -47,19 +48,21 @@ void loop() {
   if (Serial3.available() > 0) {
     incomingByte = Serial3.read();
 
-    if (state < REST) {
+    if (state <= ACT_WHEN_WAITING) {
       switch(incomingByte) {
         case 'a':
-          state = WAIT;
+          place = -1;
+          if (state != ACT_WHEN_WAITING) {
+            state = WAIT;
+          }
           break;
         case 'b':
         case 'c':
         case 'd':
         case 'e':
-          state = CLOSE;
           place = int(incomingByte - 'b');
-          if (place == lastPlace) {
-            state = WAIT;
+          if (place != lastPlace) {
+            state = CLOSE;
           }
           lastPlace = place;
           break;
@@ -79,7 +82,11 @@ void loop() {
   t = micros();
   switch(state) {
     case WAIT: {
-      stop();
+      if (t - wavePeriod >= restLengthForAction) {
+        state = ACT_WHEN_WAITING;
+      } else {
+        stop();
+      }
       break;
     }
     case CLOSE: {
@@ -92,18 +99,16 @@ void loop() {
       start();
       break;
     }
+    case ACT_WHEN_WAITING: {
+      execute(actWhenWaiting, true);
+      break;
+    }
     case ACT_WHEN_CLOSE: {
-      execute(actWhenClose);
+      execute(actWhenClose, false);
       break;
     }
     case ACT_WHEN_TOUCHED: {
-      execute(actWhenTouched);
-      break;
-    }
-    case REST: {
-      if (t - wavePeriod >= restLength) {
-        state = WAIT;
-      }
+      execute(actWhenTouched, false);
       break;
     }
     default: {
@@ -146,13 +151,15 @@ void drive(
   }
 }
 
-void execute(float (*act)(int)) {
+void execute(float (*act)(int), boolean shouldLoop) {
   float lastPhase = act(place);
   if (t - pwmPeriod >= pwmLength) {
     pwmPeriod = t;
   }
   if (lastPhase >= 1) {
-    state = REST;
+    if (!shouldLoop) {
+      state = WAIT;
+    }
     start();
   }
 }
