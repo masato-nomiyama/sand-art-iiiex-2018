@@ -59,7 +59,6 @@ void loop() {
         case 'b':
         case 'c':
         case 'd':
-        case 'e':
           place = incomingByte - 'b';
           if (place != lastPlace) {
             state = CLOSE;
@@ -68,12 +67,11 @@ void loop() {
           }
           lastPlace = place;
           break;
+        case 'e':
         case 'f':
         case 'g':
-        case 'h':
-        case 'i':
           state = TOUCHED;
-          place = incomingByte - 'f';
+          place = incomingByte - 'e';
           lastPlace = place;
           break;
         default:
