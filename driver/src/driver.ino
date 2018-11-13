@@ -118,6 +118,12 @@ void loop() {
 }
 
 // CORE
+void initWaveLengthRates(float *waveLengthRates, unsigned int phaseNum) {
+  for (unsigned int i = 0; i < phaseNum; i++) {
+    waveLengthRates[i] = 1.0;
+  }
+}
+
 float setPhases(float *phases, float *waveLengthRates, unsigned int phaseNum) {
   float propagateOffset = 0;
   for (unsigned int i = 0; i < phaseNum; i++) {
