@@ -23,7 +23,7 @@ unsigned long wavePeriod = 0;
 unsigned long propagateOffset = 0;
 
 // I/O
-int pins[] = { 2, 3, 4, 5 };
+int pins[] = {34,54,30,63,62,53,26,10,2,35,11,46,22,6,55,31,7,42,18,16,51,27,3,41,36,12,47,23,61,56,32,8,43,19,17,52,28,4,40,37,13,48,24,58,50,33,9,44,20,60,49,29,5,39,57,45,25,59,38,21};
 int pinNum = sizeof(pins) / sizeof(int);
 char incomingByte;
 
