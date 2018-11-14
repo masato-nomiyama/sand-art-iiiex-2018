@@ -10,12 +10,13 @@
 int state = WAIT;
 int place = 0;
 int lastPlace = -1;
+int action = 0;
 const unsigned long restLengthForReset = 1000000 * 1;
-const unsigned long restLengthForAction = 1000000 * 20;
+const unsigned long restLengthForAction = 1000000 * 10;
 
 // MOVEMENT (unit: μs)
 const unsigned long pwmLength = 10000;
-const unsigned long waveLength = 512000;
+const unsigned long waveLength = 500000;
 const float propagateRate = 0.1;
 unsigned long t = 0;
 unsigned long pwmPeriod = 0;
@@ -35,7 +36,7 @@ void drive(
   int *drivePins,
   unsigned int phaseNum
 );
-void execute(float (*act)(int), boolean shouldLoop);
+void execute(float (*act)(int, int), boolean shouldLoop);
 
 void setup() {
   Serial3.begin(9600);
@@ -54,6 +55,8 @@ void loop() {
           lastPlace = -1;
           if (state != ACT_WHEN_WAITING) {
             state = WAIT;
+          } else {
+            stop();
           }
           break;
         case 'b':
@@ -70,9 +73,14 @@ void loop() {
         case 'e':
         case 'f':
         case 'g':
-          state = TOUCHED;
           place = incomingByte - 'e';
+          if (place != lastPlace) {
+            state = TOUCHED;
+          } else {
+            start();
+          }
           lastPlace = place;
+          break;
           break;
         default:
           break;
@@ -83,9 +91,8 @@ void loop() {
   switch(state) {
     case WAIT: {
       if (t - wavePeriod >= restLengthForAction) {
+        action = (int)random(0, 100);
         state = ACT_WHEN_WAITING;
-      } else {
-        stop();
       }
       break;
     }
@@ -118,9 +125,25 @@ void loop() {
 }
 
 // CORE
-void initWaveLengthRates(float *waveLengthRates, unsigned int phaseNum) {
+void initWaveLengthRates(float *waveLengthRates, unsigned int phaseNum, float value) {
   for (unsigned int i = 0; i < phaseNum; i++) {
-    waveLengthRates[i] = 1.0;
+    waveLengthRates[i] = value;
+  }
+}
+
+void initWaveLengthRatesForAcceleration(
+  float *waveLengthRates,
+  unsigned int phaseNum,
+  float acceleration,
+  float limit
+) {
+  for (unsigned int i = 0; i < phaseNum; i++) {
+    waveLengthRates[i] = 1.0 - propagateRate * acceleration * i;
+    if (acceleration >= 0) {
+      waveLengthRates[i] = waveLengthRates[i] <= limit ? limit : waveLengthRates[i];
+    } else {
+      waveLengthRates[i] = waveLengthRates[i] >= limit ? limit : waveLengthRates[i];
+    }
   }
 }
 
@@ -129,6 +152,15 @@ float setPhases(float *phases, float *waveLengthRates, unsigned int phaseNum) {
   for (unsigned int i = 0; i < phaseNum; i++) {
     phases[i] = (float)((t - wavePeriod) - propagateOffset) / waveLength / waveLengthRates[i];
     propagateOffset += (float)waveLength * propagateRate * waveLengthRates[i];
+  }
+  return phases[phaseNum - 1];
+}
+
+float setDigitalPhases(float *phases, float *waveLengthRates, unsigned int phaseNum) {
+  float propagateOffset = 0;
+  for (unsigned int i = 0; i < phaseNum; i++) {
+    phases[i] = (float)((t - wavePeriod) - propagateOffset) / waveLength / waveLengthRates[i];
+    propagateOffset += (float)waveLength * waveLengthRates[i];
   }
   return phases[phaseNum - 1];
 }
@@ -157,14 +189,17 @@ void drive(
   }
 }
 
-void execute(float (*act)(int), boolean shouldLoop) {
-  float lastPhase = act(place);
+void execute(float (*act)(int, int), boolean shouldLoop) {
+  float lastPhase = act(place, action);
   if (t - pwmPeriod >= pwmLength) {
     pwmPeriod = t;
   }
   if (lastPhase >= 1) {
+    action = (int)random(0, 100);
     if (!shouldLoop) {
       state = WAIT;
+    } else {
+      stop();
     }
     start();
   }

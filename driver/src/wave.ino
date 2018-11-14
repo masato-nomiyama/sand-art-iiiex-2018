@@ -1,13 +1,5 @@
 // Copyright (C) 2018-Present Masato Nomiyama
 
-float random(float phase) {
-  if (phase < 0 || phase > 1) {
-    return 0;
-  } else {
-    return (float)random(40, 70) / 100;
-  }
-}
-
 float rectangle(float phase) {
   if (phase < 0 || phase > 1) {
     return 0;
