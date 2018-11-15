@@ -12,7 +12,7 @@ int place = 0;
 int lastPlace = -1;
 int action = 0;
 const unsigned long restLengthForReset = 1000000 * 1;
-const unsigned long restLengthForAction = 1000000 * 10;
+const unsigned long restLengthForAction = 1000000 * 5;
 
 // MOVEMENT (unit: μs)
 const unsigned long pwmLength = 10000;
