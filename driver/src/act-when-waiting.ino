@@ -2,7 +2,7 @@
 
 float actWhenWaiting(int place, int action) {
   float lastPhase = 1.0;
-  switch(action % 4) {
+  switch(action % 3) {
     case 0: {
       lastPhase = digitalRippleAction();
       break;
@@ -13,10 +13,6 @@ float actWhenWaiting(int place, int action) {
     }
     case 2: {
       lastPhase = digitalRevertArrowAction();
-      break;
-    }
-    case 3: {
-      lastPhase = digitalNumberAction();
       break;
     }
     default: {

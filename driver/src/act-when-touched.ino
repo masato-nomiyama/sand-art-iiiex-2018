@@ -2,24 +2,16 @@
 
 float actWhenTouched(int place, int action) {
   float lastPhase = 1.0;
-  switch(action % 5) {
+  switch(action % 3) {
     case 0: {
-      lastPhase = walkAction(place);
-      break;
-    }
-    case 1: {
       lastPhase = rippleAction(place);
       break;
     }
-    case 2: {
-      lastPhase = waveAction(place);
-      break;
-    }
-    case 3: {
+    case 1: {
       lastPhase = lineAction(place);
       break;
     }
-    case 4: {
+    case 2: {
       lastPhase = gravityAction(place);
       break;
     }

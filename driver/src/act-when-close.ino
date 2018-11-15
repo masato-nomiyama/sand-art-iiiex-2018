@@ -2,13 +2,13 @@
 
 float actWhenClose(int place, int action) {
   float lastPhase = 1.0;
-  switch(place) {
-    case 0:
-    case 1:
-    case 2: {
+  switch(action % 2) {
+    case 0: {
+      lastPhase = walkAction(place);
       break;
     }
-    default: {
+    case 1: {
+      lastPhase = waveAction(place);
       break;
     }
   }

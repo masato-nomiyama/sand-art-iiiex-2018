@@ -55,6 +55,7 @@ void loop() {
           lastPlace = -1;
           if (state != ACT_WHEN_WAITING) {
             state = WAIT;
+            action = (int)random(0, 100);
           } else {
             stop();
           }
@@ -63,7 +64,7 @@ void loop() {
         case 'c':
         case 'd':
           place = incomingByte - 'b';
-          if (place != lastPlace) {
+          if (place != lastPlace && lastPlace != 1) {
             state = CLOSE;
           } else {
             start();
@@ -74,11 +75,7 @@ void loop() {
         case 'f':
         case 'g':
           place = incomingByte - 'e';
-          if (place != lastPlace) {
-            state = TOUCHED;
-          } else {
-            start();
-          }
+          state = TOUCHED;
           lastPlace = place;
           break;
           break;
@@ -195,10 +192,10 @@ void execute(float (*act)(int, int), boolean shouldLoop) {
     pwmPeriod = t;
   }
   if (lastPhase >= 1) {
-    action = (int)random(0, 100);
     if (!shouldLoop) {
       state = WAIT;
     } else {
+      action = (int)random(0, 100);
       stop();
     }
     start();
