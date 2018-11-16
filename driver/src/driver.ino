@@ -49,27 +49,25 @@ void loop() {
   if (Serial3.available() > 0) {
     incomingByte = Serial3.read();
 
-    if (state <= ACT_WHEN_WAITING) {
+    if (state <= ACT_WHEN_CLOSE) {
       switch(incomingByte) {
         case 'a':
           lastPlace = -1;
-          if (state != ACT_WHEN_WAITING) {
+          if (state != ACT_WHEN_WAITING && state != ACT_WHEN_CLOSE) {
             state = WAIT;
             action = (int)random(0, 100);
-          } else {
-            stop();
           }
           break;
         case 'b':
         case 'c':
         case 'd':
-          place = incomingByte - 'b';
-          if (place != lastPlace && lastPlace != 1) {
-            state = CLOSE;
-          } else {
-            start();
+          if (state != ACT_WHEN_CLOSE) {
+            place = incomingByte - 'b';
+            if (place != lastPlace && lastPlace != 1) {
+              state = CLOSE;
+            }
+            lastPlace = place;
           }
-          lastPlace = place;
           break;
         case 'e':
         case 'f':
@@ -87,19 +85,23 @@ void loop() {
   t = micros();
   switch(state) {
     case WAIT: {
+      stop();
       if (t - wavePeriod >= restLengthForAction) {
         action = (int)random(0, 100);
         state = ACT_WHEN_WAITING;
+        start();
       }
       break;
     }
     case CLOSE: {
       state = ACT_WHEN_CLOSE;
+      stop();
       start();
       break;
     }
     case TOUCHED: {
       state = ACT_WHEN_TOUCHED;
+      stop();
       start();
       break;
     }
