@@ -695,8 +695,123 @@ float digitalRippleAction() {
   drive(rectangle, phases[0], 1.0, x1, sizeof(x1) / sizeof(int));
   int x2[] = { 14, 15, 16, 19, 22, 24, 28, 30, 33, 36, 37, 38 };
   drive(rectangle, phases[1], 1.0, x2, sizeof(x2) / sizeof(int));
-  int x3[] = { 4, 5, 6, 13, 18, 34, 40, 46, 47, 48 };
+  int x3[] = { 4, 5, 6, 12, 18, 34, 40, 46, 47, 48 };
   drive(rectangle, phases[2], 1.0, x3, sizeof(x3) / sizeof(int));
+  int x4[] = { 44, 50, 55, 56, 57 };
+  drive(rectangle, phases[3], 1.0, x4, sizeof(x4) / sizeof(int));
+  int x5[] = {  }; drive(triangleSpike, phases[4], 0.0, x5, sizeof(x5) / sizeof(int));
+
+  return lastPhase;
+}
+
+float digitalRippleAction2() {
+  //Set phases
+  float waveLengthRates[7] = {};
+  initWaveLengthRates(
+    waveLengthRates,
+    sizeof(waveLengthRates) / sizeof(float),
+    0.4
+  );
+  waveLengthRates[6] = 10.0;
+  float phases[7] = {};
+  float lastPhase = setDigitalPhases(
+    phases,
+    waveLengthRates,
+    sizeof(phases) / sizeof(float)
+  );
+
+  // Drive magnets
+  int x1[] = { 12 }; drive(rectangle, phases[0], 1.0, x1, sizeof(x1) / sizeof(int));
+  int x2[] = { 23, 22, 16, 10, 5, 2 }; drive(rectangle, phases[1], 1.0, x2, sizeof(x2) / sizeof(int));
+  int x3[] = { 33, 32, 26, 20, 14, 9, 4, 1, 0 }; drive(rectangle, phases[2], 1.0, x3, sizeof(x3) / sizeof(int));
+  int x4[] = { 43, 42, 36, 30, 24 }; drive(rectangle, phases[3], 1.0, x4, sizeof(x4) / sizeof(int));
+  int x5[] = { 53, 52, 46, 40, 34 }; drive(rectangle, phases[4], 1.0, x5, sizeof(x5) / sizeof(int));
+  int x6[] = { 59, 58, 55, 50, 44 }; drive(rectangle, phases[5], 1.0, x6, sizeof(x6) / sizeof(int));
+  int x7[] = {  }; drive(rectangle, phases[6], 0.0, x7, sizeof(x7) / sizeof(int));
+
+  return lastPhase;
+}
+
+float digitalRippleAction3() {
+  //Set phases
+  float waveLengthRates[7] = {};
+  initWaveLengthRates(
+    waveLengthRates,
+    sizeof(waveLengthRates) / sizeof(float),
+    0.4
+  );
+  waveLengthRates[6] = 10.0;
+  float phases[7] = {};
+  float lastPhase = setDigitalPhases(
+    phases,
+    waveLengthRates,
+    sizeof(phases) / sizeof(float)
+  );
+
+  // Drive magnets
+  int x1[] = { 5 }; drive(rectangle, phases[0], 1.0, x1, sizeof(x1) / sizeof(int));
+  int x2[] = { 9, 15, 16, 17, 12, 7, 3 }; drive(rectangle, phases[1], 1.0, x2, sizeof(x2) / sizeof(int));
+  int x3[] = { 19, 25, 26, 27, 28, 23, 18, 13, 8 }; drive(rectangle, phases[2], 1.0, x3, sizeof(x3) / sizeof(int));
+  int x4[] = { 29, 35, 36, 37, 38 }; drive(rectangle, phases[3], 1.0, x4, sizeof(x4) / sizeof(int));
+  int x5[] = { 39, 45, 46, 47, 48 }; drive(rectangle, phases[4], 1.0, x5, sizeof(x5) / sizeof(int));
+  int x6[] = { 49, 54, 55, 56, 57 }; drive(rectangle, phases[5], 1.0, x6, sizeof(x6) / sizeof(int));
+  int x7[] = {  }; drive(rectangle, phases[6], 0.0, x7, sizeof(x7) / sizeof(int));
+
+  return lastPhase;
+}
+
+float digitalRippleAction4() {
+  //Set phases
+  float waveLengthRates[7] = {};
+  initWaveLengthRates(
+    waveLengthRates,
+    sizeof(waveLengthRates) / sizeof(float),
+    0.4
+  );
+  waveLengthRates[6] = 10.0;
+  float phases[7] = {};
+  float lastPhase = setDigitalPhases(
+    phases,
+    waveLengthRates,
+    sizeof(phases) / sizeof(float)
+  );
+
+  // Drive magnets
+  int x1[] = { 56 }; drive(rectangle, phases[0], 1.0, x1, sizeof(x1) / sizeof(int));
+  int x2[] = { 54, 50, 45, 46, 47, 53 }; drive(rectangle, phases[1], 1.0, x2, sizeof(x2) / sizeof(int));
+  int x3[] = { 49, 44, 39, 34, 35, 36, 37, 43 }; drive(rectangle, phases[2], 1.0, x3, sizeof(x3) / sizeof(int));
+  int x4[] = { 24, 25, 26, 27, 33 }; drive(rectangle, phases[3], 1.0, x4, sizeof(x4) / sizeof(int));
+  int x5[] = { 14, 15, 16, 17, 23 }; drive(rectangle, phases[4], 1.0, x5, sizeof(x5) / sizeof(int));
+  int x6[] = { 4, 5, 6, 7, 13 }; drive(rectangle, phases[5], 1.0, x6, sizeof(x6) / sizeof(int));
+  int x7[] = {  }; drive(rectangle, phases[6], 0.0, x7, sizeof(x7) / sizeof(int));
+
+  return lastPhase;
+}
+
+float digitalRippleAction5() {
+  //Set phases
+  float waveLengthRates[7] = {};
+  initWaveLengthRates(
+    waveLengthRates,
+    sizeof(waveLengthRates) / sizeof(float),
+    0.4
+  );
+  waveLengthRates[6] = 10.0;
+  float phases[7] = {};
+  float lastPhase = setDigitalPhases(
+    phases,
+    waveLengthRates,
+    sizeof(phases) / sizeof(float)
+  );
+
+  // Drive magnets
+  int x1[] = { 50 }; drive(rectangle, phases[0], 1.0, x1, sizeof(x1) / sizeof(int));
+  int x2[] = { 39, 40, 46, 52, 56, 58 }; drive(rectangle, phases[1], 1.0, x2, sizeof(x2) / sizeof(int));
+  int x3[] = { 29, 30, 36, 42, 48, 53, 57, 59 }; drive(rectangle, phases[2], 1.0, x3, sizeof(x3) / sizeof(int));
+  int x4[] = { 19, 20, 26, 32, 38 }; drive(rectangle, phases[3], 1.0, x4, sizeof(x4) / sizeof(int));
+  int x5[] = { 9, 10, 16, 22, 28 }; drive(rectangle, phases[4], 1.0, x5, sizeof(x5) / sizeof(int));
+  int x6[] = { 1, 2, 3, 8 }; drive(rectangle, phases[5], 1.0, x6, sizeof(x6) / sizeof(int));
+  int x7[] = {  }; drive(rectangle, phases[6], 0.0, x7, sizeof(x7) / sizeof(int));
 
   return lastPhase;
 }
